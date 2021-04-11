@@ -3,10 +3,10 @@
 import imapclient # connecting to the drynet mail server
 import os # navigating directories
 import email # parsing the email
-from email.header import decode_header
 import PyPDF2 # parsing the PDF
 import celery # scheduling reads of the inbox
 import pprint
+import re
 
 ## authentication # create a function here
 imap_host = 'imap.ionos.de'
@@ -27,8 +27,12 @@ to_deliveries = imap.search(['TO', 'deliveries@drynet.de'])
 # create a function here
 for uid, msg_data in imap.fetch(to_deliveries, 'RFC822').items():
     email_message = email.message_from_bytes(msg_data[b'RFC822'])
-    print(uid, email_message.get('From')) # visual confirmation
-    
+    if email_message.get('From') == 'Holger Ritter <holger.ritter@drynet.net>':
+        if email_message.get_content_maintype() == 'multipart':
+            del_note = 'DRYNET_Delivery_Note'
+            for part in email_message.walk():
+                                     # visual confirmation
+
 
 
 
@@ -43,3 +47,6 @@ for uid, msg_data in imap.fetch(to_deliveries, 'RFC822').items():
 
 
 # database update or error report (email support with info)
+
+# logout of email server
+imap.logout()
