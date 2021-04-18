@@ -3,7 +3,6 @@
 import imapclient # connecting to the drynet mail server
 import os # navigating directories
 import email # parsing the email
-import pprint
 
 ## authentication # create a function here
 imap_host = 'imap.ionos.de'
@@ -13,22 +12,13 @@ imap_user = 'support@drynet.de'
 imap_pass = '$uPPort2018'
 # attachments folder
 attachments_folder = "C:/Users/SeamusMcMillen/OneDrive/Android/development/data_scrape/ScrapingEmails/attachments"
+
+for file in os.listdir(attachments_folder):
+    os.remove(os.path.join(attachments_folder, file))
+
 server = imapclient.IMAPClient(imap_host, ssl=True)
 server.login(imap_user, imap_pass)
 
-## Enter an idle mode to monitor inbox
-# Start IDLE mode
-''' server.idle()
-print("Connection is now in IDLE mode, send yourself an email or quit with ^c")
-
-while True:
-    try:
-        # Wait for up to 30 seconds for an IDLE response
-        responses = server.idle_check(timeout=30)
-        print("Server sent:", responses if responses else "nothing")
-    except KeyboardInterrupt:
-        break
-'''
 ## Searching for delivery notes
 server.select_folder('Inbox', readonly=True)
 # email search & retrieval (from *holger.ritter@drynet.net', to 'deliveries@drynet.de' has attachment, content "delivery note")
@@ -50,17 +40,23 @@ for uid, msg_data in server.fetch(correct_to_from, 'RFC822').items():
                     fp.write(part.get_payload(decode=True))
                     fp.close()
 
-## pdf module
-# pdf parsing
-
-
-
 ## database module
 # database comparison for parsed database
-
-
 
 # database update or error report (email support with info)
 
 # logout of email server
+## Enter an idle mode to monitor inbox
+# Start IDLE mode
+''' server.idle()
+print("Connection is now in IDLE mode, send yourself an email or quit with ^c")
+
+while True:
+    try:
+        # Wait for up to 30 seconds for an IDLE response
+        responses = server.idle_check(timeout=30)
+        print("Server sent:", responses if responses else "nothing")
+    except KeyboardInterrupt:
+        break
+'''
 server.logout()
