@@ -60,7 +60,7 @@ while True:
     try:
         # Wait for up to 30 seconds for an IDLE response
         responses = server.idle_check(timeout=30)
-        if responses is responses:
+        if responses:
             get_email()
         else:
             print('No new emails')
@@ -68,5 +68,4 @@ while True:
         server.idle_done()
         break
 
-# get_email()
 server.logout()
