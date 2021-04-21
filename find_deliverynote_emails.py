@@ -3,6 +3,7 @@
 import imapclient # connecting to the drynet mail server
 import os # navigating directories
 import email # parsing the email
+import logging #
 
 ## authentication # create a function here
 imap_host = 'imap.ionos.de'
@@ -13,10 +14,10 @@ imap_pass = '$uPPort2018'
 # attachments folder
 attachments_folder = "C:/Users/SeamusMcMillen/OneDrive/Android/development/data_scrape/ScrapingEmails/attachments"
 
-# This should happen as port of the PDF module (and not delelete but archive)
+'''# This should happen as port of the PDF module (and not delelete but archive)
 for file in os.listdir(attachments_folder):
     os.remove(os.path.join(attachments_folder, file))
-#####
+#####'''
 
 # Connect to server
 server = imapclient.IMAPClient(imap_host, ssl=True)
@@ -29,11 +30,11 @@ def get_email():
     # Connect to server
     server = imapclient.IMAPClient(imap_host, ssl=True)
     server.login(imap_user, imap_pass)
-    server.select_folder('Inbox', readonly=True)
+    server.select_folder('Inbox', readonly=False)
     ## Identifying new delivery notes
     correct_to = server.search(['TO', 'deliveries@drynet.de']) # only emails to deliveries
     correct_from = server.search(['FROM', 'seamus.mcmillen@drynet.net']) # only emails from holger.ritter
-    print(set.intersection(set(correct_to), set(correct_from))) # visaul validation of emails with two criteria
+    # print(set.intersection(set(correct_to), set(correct_from))) # visaul validation of emails with two criteria
     correct_to_from = set.intersection(set(correct_to), set(correct_from)) # intersection of from and to addresses
 
     # create functions here (fetching, reading, finding attachments, writing pdfs)
@@ -48,6 +49,7 @@ def get_email():
                     with open(attachment_path, 'wb') as fp:
                         fp.write(part.get_payload(decode=True))
                         fp.close()
+            server.move(uid, 'Delivery_Archive')
 
 # database update or error report (email support with info)
 
