@@ -32,6 +32,11 @@ for filename in os.listdir(pdf_dir):
             serial_no = re.findall('S/N ([a-zA-Z0-9\-]+)', text)
             iccid = re.findall('ICCID: ([0-9]+)', text)
             bundle = re.findall('Airtime ([a-zA-Z0-9]+)', text)
-            monthly_volume = re.findall('Monthly Data Volume included: ([a-zA-Z0-9]+)', text)
+            monthly_volume = re.findall('Monthly Data Volume incuded: ([a-zA-Z0-9]+)', text)
             # monthly_volume = re.findall('Monthly Data Volume included: ([a-zA-Z0-9]+)', text)
-            print(company, vessel, imo, serial_no, iccid, bundle, monthly_volume)
+            import_list = company + vessel + imo + serial_no + iccid + bundle + monthly_volume
+            print(import_list)
+            # we should also attach the pdf to the record in db
+        continue
+    else:
+        continue
