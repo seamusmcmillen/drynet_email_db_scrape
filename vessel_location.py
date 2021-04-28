@@ -27,7 +27,7 @@ lat = vessel_info['last_known_position']['geometry']['coordinates'][1] # might b
 geom = "POINT(%s %s)"% (str(lon).strip(), str(lat).strip())
 destination = vessel_info['most_recent_voyage']['destination']
 eta_raw = vessel_info['most_recent_voyage']['eta']
-eta = eta_raw[:10]
+eta = eta_raw[:19].replace('T', ' ') + ' UTC'
 date_position = vessel_info['last_known_position']['timestamp'] # ID how to make this what the db expects
 course = vessel_info['last_known_position']['heading']
 speed = vessel_info['last_known_position']['speed']
@@ -35,7 +35,7 @@ now = datetime.now()
 # now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 last_update_string = date_position[:19].replace('T', ' ')
 last_update = datetime.strptime(last_update_string, "%Y-%m-%d %H:%M:%S")
-delta_date_last_now = now - last_update
+
 delta_humanize = humanize.naturaltime(datetime.now() - last_update)
 # How to format this as 1 hour 36 minutes ago
 
@@ -44,14 +44,12 @@ print("Name:", name,
     "IMO:", imo,
     "Geom:", geom,
     "Lat:", lat,
-    "Long:", lon,
+    "Lon:", lon,
+    "Speed:", speed,
+    "Course:", course,
     "Dest.:", destination,
     "ETA:", eta,
     "Last Seen:", delta_humanize,
-    "Updated:", last_update,
-    "Time now:", now.strftime("%Y-%m-%d %H:%M:%S"),
-    "Course:", course,
-    "Speed:", speed
     )
 '''
 VesselLocation.objects.create(
