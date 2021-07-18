@@ -15,7 +15,7 @@ imap_host = 'imap.ionos.de'
 # credentials in seperate module
 imap_user = 'support@drynet.de'
 # authentication - commit after testing
-imap_pass = '$uPPort2018'
+imap_pass = 'password'
 # attachments folder
 attachments_folder = "C:/Users/SeamusMcMillen/OneDrive/Android/development/data_scrape/ScrapingEmails/attachments"
 
